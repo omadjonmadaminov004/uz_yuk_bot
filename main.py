@@ -1,4 +1,3 @@
-import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ContextTypes, ConversationHandler
 
@@ -14,20 +13,20 @@ async def start(update, context):
     if update.effective_user.username == ADMIN:
         ADMIN_ID = update.effective_chat.id
     kb = [[InlineKeyboardButton("📦 Yuk yuboruvchi", callback_data="sender")],[InlineKeyboardButton("🚚 Haydovchi", callback_data="driver")]]
-    await update.message.reply_text("👋 UzYuk ga xush kelibsiz!\n\nSiz kimسiz?", reply_markup=InlineKeyboardMarkup(kb))
+    await update.message.reply_text("👋 UzYuk ga xush kelibsiz!\n\nSiz kimsiz?", reply_markup=InlineKeyboardMarkup(kb))
     return ROLE
 
 async def role(update, context):
     q = update.callback_query
     await q.answer()
     if q.data == "sender":
-        await q.edit_message_text("📦 Yukingiz qayerdan jo'natiladi?")
+        await q.edit_message_text("📦 Yukingiz qayerdan jonatiladi?")
         return QAYERDAN
     text = "🚛 Mavjud yuklar:\n\n"
     if not yuklar:
-        text += "Hozircha yuk yo'q."
+        text += "Hozircha yuk yoq."
     for y in yuklar:
-        text += f"#{y['id']} {y['dan']} → {y['ga']} | {y['og']} | {y['narx']}\n📱 {y['tel']}\n\n"
+        text += f"#{y['id']} {y['dan']} -> {y['ga']} | {y['og']} | {y['narx']}\n📱 {y['tel']}\n\n"
     await q.edit_message_text(text)
     return ConversationHandler.END
 
@@ -38,7 +37,7 @@ async def qayerdan(update, context):
 
 async def qayerga(update, context):
     context.user_data['ga'] = update.message.text
-    await update.message.reply_text("⚖️ Og'irligi?")
+    await update.message.reply_text("⚖️ Ogirligi?")
     return OGIRLIK
 
 async def ogirlik(update, context):
@@ -56,15 +55,15 @@ async def tel(update, context):
     y = {'id':yuk_id[0],'dan':d['dan'],'ga':d['ga'],'og':d['og'],'narx':d['narx'],'tel':update.message.text}
     yuklar.append(y)
     yuk_id[0] += 1
-    await update.message.reply_text(f"✅ Qabul qilindi!\n{y['dan']} → {y['ga']}\n{y['og']} | {y['narx']}\nHaydovchilar tez orada bog'lanadi!")
+    await update.message.reply_text(f"✅ Qabul qilindi!\n{y['dan']} -> {y['ga']}\n{y['og']} | {y['narx']}\nHaydovchilar tez orada boglanadi!")
     if ADMIN_ID:
-        await context.bot.send_message(ADMIN_ID, f"🆕 Yangi yuk #{y['id']}\n{y['dan']}→{y['ga']}\n{y['og']} | {y['narx']}\n📱 {y['tel']}")
+        await context.bot.send_message(ADMIN_ID, f"🆕 Yangi yuk #{y['id']}\n{y['dan']}->{y['ga']}\n{y['og']} | {y['narx']}\n📱 {y['tel']}")
     return ConversationHandler.END
 
 async def admin(update, context):
     global ADMIN_ID
     if update.effective_user.username != ADMIN:
-        await update.message.reply_text("❌ Ruxsat yo'q!")
+        await update.message.reply_text("❌ Ruxsat yoq!")
         return
     ADMIN_ID = update.effective_chat.id
     await update.message.reply_text(f"👑 Admin panel\nJami yuklar: {len(yuklar)}")
