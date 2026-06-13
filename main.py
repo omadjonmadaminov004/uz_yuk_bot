@@ -1,4 +1,3 @@
-
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ConversationHandler
 
@@ -107,5 +106,5 @@ def main():
     print("Bot ishga tushdi!")
     app.run_polling()
 
-if __name__ == "__main__":
-    
+if name == "__main__":
+    main()
